@@ -1,0 +1,15 @@
+
+.set-up-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

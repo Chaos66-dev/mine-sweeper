@@ -1,0 +1,10 @@
+
+
+.tile {
+    height: 30px;
+    width: 30px;
+    padding: '10px';
+    border: '1px solid black';
+    border-radius: 5%;
+    background-color: grey;
+}
