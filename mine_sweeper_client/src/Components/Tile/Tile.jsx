@@ -1,11 +1,12 @@
 import { useContext } from 'react'
 
-function Tile({cell}) {
-
+function Tile({value}) {
 
     return (
         <>
-            {cell.value}
+        <div className="tile-wrapper">
+            {value}
+        </div>
         </>
     )
 }

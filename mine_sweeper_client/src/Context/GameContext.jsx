@@ -1,12 +1,10 @@
 import { createContext, useState } from 'react'
-import Board from '../Classes/Board.js'
 
-const startingBoard = new Board()
 const GameContext = createContext({user: '', setUser: () => {},
                                     difficulty: 'normal', setDifficulty: () => {},
                                     time: '00:00', setTime: () => {},
                                     inSettings: true, setInSettings: () => {},
-                                    board: startingBoard, setBoard: () => {}});
+                                    boardState: '----------------------------------------------------------------------------------------------------', setBoardState: () => {}});
 
 
 export function GameContextProvider({ children }) {
@@ -14,7 +12,7 @@ export function GameContextProvider({ children }) {
     const [difficulty, setDifficulty] = useState('normal');
     const [time, setTime] = useState('00:00');
     const [inSettings, setInSettings] = useState(true)
-    const [board, setBoard] = useState(startingBoard)
+    const [boardState, setBoardState] = useState('----------------------------------------------------------------------------------------------------')
 
 
     return (
@@ -22,7 +20,7 @@ export function GameContextProvider({ children }) {
                                         difficulty, setDifficulty,
                                         time, setTime,
                                         inSettings, setInSettings,
-                                        board, setBoard}}>
+                                        boardState, setBoardState}}>
             {children}
         </GameContext.Provider>
     );

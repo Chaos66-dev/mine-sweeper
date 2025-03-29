@@ -8,7 +8,7 @@ function App() {
   const {user, setUser} = useContext(GameContext)
   const {difficulty, setDifficulty} = useContext(GameContext)
   const {inSettings, setInSettings} = useContext(GameContext)
-  const {board, setBoard} = useContext(GameContext)
+  const {boardState, setBoardState} = useContext(GameContext)
 
   return (
     <>
@@ -21,7 +21,7 @@ function App() {
         <GameContext.Provider  value={{ user, setUser,
                                         difficulty, setDifficulty,
                                         inSettings, setInSettings,
-                                        board, setBoard}}>
+                                        boardState, setBoardState}}>
           <div className="main">
             {inSettings ?
                 <>
