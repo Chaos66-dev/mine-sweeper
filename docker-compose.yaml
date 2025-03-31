@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  client:
+    build: ./mine_sweeper_client
+    image: ms_cli_img
+    container_name: ms_cli_cont
+    ports:
+      - 5173:5173
+    depends_on:
+      - server
+
+  server:
+    build: ./mine_sweeper_server
+    image: ms_ser_img
+    container_name: ms_ser_cont
+    env_file:
+      - '.env'
+    volumes:
+      - ${DEV_VOLUME:-}
+    ports:
+      - 4000:4000
+    depends_on:
+      pg_db:
+        condition: service_healthy
+
+  pg_db:
+    image: postgres:latest
+    container_name: ms_pg_cont
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -1,4 +1,4 @@
-import server from './server/server.js'
+const server = require('./server/server.js');
 
 const PORT = 4000
 
