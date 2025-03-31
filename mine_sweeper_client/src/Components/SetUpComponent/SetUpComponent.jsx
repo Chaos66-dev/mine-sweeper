@@ -5,7 +5,7 @@ import './SetUpComponent.css'
 function SetUpComponent() {
     const {user, setUser,
         difficulty, setDifficulty,
-        inSettings, setInSettings} = useContext(GameContext)
+        appState, setAppState} = useContext(GameContext)
 
     function handleSaveSettings() {
         // save settings to local storage?
@@ -34,7 +34,7 @@ function SetUpComponent() {
                 </div>
                 <div className="play">
                     <button type="submit"
-                            onClick={() => setInSettings(false)}
+                            onClick={() => setAppState('in_game')}
                     >
                         Play
                     </button>

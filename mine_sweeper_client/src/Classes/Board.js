@@ -1,11 +1,13 @@
 import BoardTile from './Tile.js'
 
 class Board {
-    constructor(width = 10, length = 10) {
+    constructor(width = 10, length = 10, bombs = 10) {
         this.l = length
         this.w = width
         this.board = Array.from({ length: length }, () => Array.from({ length: width }, () => new BoardTile()));
         this.game_over = false;
+        this.win = false
+        this.bombs = bombs
     }
 
     // outputs the 2d array of tiles as a string of values that contain each tiles "value"
@@ -20,7 +22,7 @@ class Board {
                 }
             }
         }
-        console.log(output)
+        // console.log(output)
         return output
     }
 
@@ -33,10 +35,10 @@ class Board {
     }
 
     // initializes the bomb placement on the board, default value of 10
-    initBombs(num_bombs = 10){
+    initBombs(){
         let locations = new Set();
 
-        while (locations.size < num_bombs) {
+        while (locations.size < this.bombs) {
             locations.add(Math.floor(Math.random() * (this.l * this.w)));
         }
         locations = [...locations];
@@ -95,6 +97,51 @@ class Board {
 
     // takes in the row and col of the tile that was clicked and flips over all other tiles as needed
     flipTiles(row, col) {
+        function containsCoords(processed, coords) {
+            return processed.some(subArr =>
+                subArr.every((val, index) => val == coords[index])
+            );
+        }
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1], // Top-left, Top, Top-right
+            [0, -1],         [0, 1],  // Left,        Right
+            [1, -1], [1, 0], [1, 1]  // Bottom-left, Bottom, Bottom-right
+        ];
+        let processed = []
+        let queue = [[row, col]]
+        if (this.board[row][col].value != '0') {
+            this.board[row][col].is_turned = true
+            return
+        }
+
+        while (queue.length > 0) {
+            // console.log(`processed array is ${processed}, length is ${processed.length}`)
+            // console.log(`queue array is ${queue}, length is ${queue.length}`)
+
+            // console.log(queue)
+            let curr = queue.shift()
+            // console.log(`popping ${curr} from queue`)
+            if (this.board[curr[0]][curr[1]].value == '0') {
+                for (let [dx, dy] of directions) {
+                    const newRow = curr[0] + dx;
+                    const newCol = curr[1] + dy;
+
+                    if (newRow >= 0 && newRow < this.l &&
+                        newCol >= 0 && newCol < this.w &&
+                        this.board[newRow][newCol].is_turned == false &&
+                        !containsCoords(processed, [newRow, newCol]) &&
+                        !containsCoords(queue, [newRow, newCol])) {
+                        // console.log(`adding ${[newRow, newCol]} to queue`)
+                        queue.push([newRow, newCol])
+                    }
+                }
+            }
+
+            this.board[curr[0]][curr[1]].is_turned = true
+            processed.push(curr)
+            // return
+        }
+
 
     }
 
@@ -111,20 +158,33 @@ class Board {
     handleBoardClick(row, col) {
         if(this.board[row][col].is_bomb){
             this.game_over = true
+            this.win = false
             this.flipAllTiles()
         } else {
-            this.board[row][col].is_turned = true
-            console.log('i was flipped')
+            this.flipTiles(row, col)
+            if (this.board.flat().reduce((acc, tile) => {
+                return tile.is_turned ? acc + 1 : acc;
+            }, 0) == (this.w * this.l - this.bombs) && this.game_over == false) {
+                this.game_over = true
+                this.win = true
+            }
+            // else {
+            //     console.log(`tiles remaining = ${this.board.flat().reduce((acc, tile) => {
+
+            //         return tile.is_turned ? acc + 1 : acc;
+            //     }, 0) - (this.w * this.l - this.bombs)}`)
+            // }
         }
     }
 }
 
-// const test = new Board(10, 10)
-// test.initBombs()
-// test.initNonBombs()
-// console.log(test.board)
-// console.log(test.outputState())
-// console.log(test.output2dArray())
+const test = new Board(10, 10)
+test.initBombs()
+test.initNonBombs()
+console.log(test.board)
+console.log(test.outputState())
+console.log(test.output2dArray())
+console.log(test.handleBoardClick(0, 0))
 
 
 export default Board
