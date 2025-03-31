@@ -5,6 +5,9 @@ services:
     build: ./mine_sweeper_client
     image: ms_cli_img
     container_name: ms_cli_cont
+    volumes:
+      - ./mine_sweeper_client:/client
+      - /client/node_modules
     ports:
       - 5173:5173
     depends_on:

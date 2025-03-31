@@ -8,6 +8,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 
 function App() {
   const {user, setUser} = useContext(GameContext)
+  const {user_id, setUser_Id} = useContext(GameContext)
   const {difficulty, setDifficulty} = useContext(GameContext)
   const {appState, setAppState} = useContext(GameContext)
   const {boardState, setBoardState} = useContext(GameContext)
@@ -36,6 +37,7 @@ function App() {
           </h1>
         </div>
         <GameContext.Provider  value={{ user, setUser,
+                                        user_id, setUser_Id,
                                         difficulty, setDifficulty,
                                         appState, setAppState,
                                         boardState, setBoardState,

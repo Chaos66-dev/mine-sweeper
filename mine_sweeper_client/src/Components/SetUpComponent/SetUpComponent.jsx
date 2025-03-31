@@ -4,11 +4,26 @@ import './SetUpComponent.css'
 
 function SetUpComponent() {
     const {user, setUser,
+            setUser_Id,
         difficulty, setDifficulty,
         appState, setAppState} = useContext(GameContext)
 
-    function handleSaveSettings() {
-        // save settings to local storage?
+    async function handleSaveSettings() {
+        const res = await fetch(`http://localhost:4000/users?user_name=${encodeURIComponent(user)}`, {
+                                    method: "GET",
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                })
+        const data = await res.json()
+        console.log('fetch for user id: ', data)
+        console.log(data[0].id)
+        if (data.length > 0) {
+            setUser_Id(data[0].id)
+            setAppState('in_game')
+        } else {
+            // TODO handle user does not exist
+        }
     }
 
     return (
@@ -34,7 +49,7 @@ function SetUpComponent() {
                 </div>
                 <div className="play">
                     <button type="submit"
-                            onClick={() => setAppState('in_game')}
+                            onClick={handleSaveSettings}
                     >
                         Play
                     </button>

@@ -5,6 +5,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('users', (table) => {
         table.increments('id')
+        table.string('username', 50).unique()
         table.string('firstName', 25)
         table.string('lastName', 25)
         table.boolean('is_admin')
